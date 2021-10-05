@@ -1,3 +1,3 @@
 # viz_and_eda
 
-example
+this is a repo for in class example
