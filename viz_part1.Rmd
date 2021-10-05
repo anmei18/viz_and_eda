@@ -8,6 +8,12 @@ output: html_document
 ```{r }
 library(tidyverse)
 library(ggridges)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
 ```
 
 Load in a dataset that we'll use often.
@@ -173,6 +179,14 @@ what about ridges ...
 ```{r}
 weather_df %>% 
   ggplot(aes(x = tmax, y = name)) +
-  geom_density_ridges()
+  geom_density_ridges(alpha = .8, scale = .8)
+```
+
+## Embedding plots
+
+```{r fid.width = 7, fig.height= 5}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .3)
 ```
 
