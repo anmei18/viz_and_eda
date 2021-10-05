@@ -7,6 +7,7 @@ output: html_document
 
 ```{r }
 library(tidyverse)
+library(ggridges)
 ```
 
 Load in a dataset that we'll use often.
@@ -86,11 +87,11 @@ weather_df %>%
 Lets make a one more scatterplot
 
 ```{r}
-weather_df %>% 
-  ggplot(aes( x = date, y = tmax, size = prcp)) +
-  geom_point(alpha = .3) +
-  facet_grid(. ~ name) +
-  geom_smooth((se = FALSE))
+#weather_df %>% 
+  #ggplot(aes( x = date, y = tmax, size = prcp)) +
+  #geom_point(alpha = .3) +
+  #facet_grid(. ~ name) +
+  #geom_smooth((se = FALSE))
 ```
 
 
@@ -129,5 +130,49 @@ weather_df %>%
 weather_df %>% 
   ggplot(aes(x = tmin, y = tmax)) +
   geom_bin_2d()
+```
+
+
+## Univariable plots
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_histogram() +
+  facet_grid(. ~ name)
+```
+
+Lets try some other plots...
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_density(alpha = 0.3)
+  
+```
+
+Still with `tmax` and `name`
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax)) +
+  geom_boxplot()
+```
+
+
+Some people like violin plots
+
+```{r}
+weather_df %>%
+  ggplot(aes(x = name, y = tmax)) +
+  geom_violin()
+```
+
+what about ridges ...
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmax, y = name)) +
+  geom_density_ridges()
 ```
 
