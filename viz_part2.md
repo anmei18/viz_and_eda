@@ -291,3 +291,59 @@ ggplot(data = waikiki, aes(x = date, y = tmax, color = name)) +
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 <img src="viz_part2_files/figure-gfm/unnamed-chunk-11-1.png" width="90%" />
+
+## `patchwork`
+
+remember faceting?
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .5) +
+  #create a multipanel plot with the exact same type of plot
+  facet_grid((. ~ name))
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_density).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-12-1.png" width="90%" />
+
+what happens when you want multipanel plot but cant facet …?
+
+``` r
+tmax_tmin_p =
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+
+prcp_dens_p = 
+  weather_df %>%
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5) +
+  theme(legend.position =  "none")
+
+tmax_date_p = 
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  #se = standard error
+  geom_smooth(se = FALSE) +
+  theme(legend.position = "none")
+  
+# use patchwork to organzie diff. type of plots into a single figure, even with fundamentally diff geometries, mappings and arguments.
+
+#tmax_tmin_p + prcp_dens_p + tmax_date_p
+(tmax_tmin_p + prcp_dens_p) / tmax_date_p
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-13-1.png" width="90%" />
