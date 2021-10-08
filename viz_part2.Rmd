@@ -258,3 +258,58 @@ tmax_date_p =
 (tmax_tmin_p + prcp_dens_p) / tmax_date_p
 ```
 
+
+## Data Manipulation
+
+Control your factors
+
+R recognizes: 1 = CentralPark_NY , 2 = Waikiki_HA, 3 Waterhole_WA by default
+
+It puts the labels in alphabetical order, in order to override it, first need to change the column "name" from character variable to factor variable, and then specify the order using `fct_relevel()` from `forcats` package.
+
+```{r}
+weather_df %>%
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA"))
+  ) %>% 
+  ggplot(aes( x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = .5)
+```
+
+Always try using data manipulation first if you want to make changes to the plot
+
+What if I wanted densities for tmin and tmax simultaneously?
+Could i get on a single panel and have the tmin and tmax overlaid on each other?
+
+```{r}
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures,fill = observation)) +
+  geom_density(alpha = .5)
+```
+
+
+```{r}
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures,fill = observation)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+Recogniazing this is a data tidiness issue makes it easier to work on
+
+```{r}
+
+```
+

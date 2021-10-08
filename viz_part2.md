@@ -347,3 +347,67 @@ tmax_date_p =
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 <img src="viz_part2_files/figure-gfm/unnamed-chunk-13-1.png" width="90%" />
+
+## Data Manipulation
+
+Control your factors
+
+R recognizes: 1 = CentralPark\_NY , 2 = Waikiki\_HA, 3 Waterhole\_WA by
+default
+
+It puts the labels in alphabetical order, in order to override it, first
+need to change the column “name” from character variable to factor
+variable, and then specify the order using `fct_relevel()` from
+`forcats` package.
+
+``` r
+weather_df %>%
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA"))
+  ) %>% 
+  ggplot(aes( x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = .5)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-14-1.png" width="90%" />
+
+Always try using data manipulation first if you want to make changes to
+the plot
+
+What if I wanted densities for tmin and tmax simultaneously? Could i get
+on a single panel and have the tmin and tmax overlaid on each other?
+
+``` r
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures,fill = observation)) +
+  geom_density(alpha = .5)
+```
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-15-1.png" width="90%" />
+
+``` r
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures,fill = observation)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 18 rows containing non-finite values (stat_density).
+
+<img src="viz_part2_files/figure-gfm/unnamed-chunk-16-1.png" width="90%" />
+
+Recogniazing this is a data tidiness issue makes it easier to work on
