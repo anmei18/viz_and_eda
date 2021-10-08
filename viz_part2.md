@@ -95,7 +95,7 @@ weather_df %>%
 
 ![](viz_part2_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
-\#\#labels
+## labels
 
 ``` r
 weather_df %>% 
@@ -112,3 +112,80 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](viz_part2_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+## Scales
+
+start with the same plot
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    title = "Temperature plot",
+    x = "Minimum daily temperature(C)",
+    y = "Maximum daily temperature(C)",
+    caption = "Data from rnoaa package; temperature in 2017."
+  ) +
+  #defining some scales:
+  #for x axis
+  scale_x_continuous(
+    #define and label the breaks(needs to be numbers)
+    breaks = c(-15,0,15),
+    labels = c("-15 C","0","15")
+  ) +
+  #for y axis
+  scale_y_continuous(
+    #square root transformation
+    #trans = "sqrt"
+    #change the y axis labels to the right side
+    position = "right"
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_part2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+Look at color scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    title = "Temperature plot",
+    x = "Minimum daily temperature(C)",
+    y = "Maximum daily temperature(C)",
+    caption = "Data from rnoaa package; temperature in 2017."
+  ) +
+  # Change the color of the points; by default it goes from 0 to 360
+  scale_color_hue(
+    #change the label:"name" of the points to "location"
+    name = "Location",
+    h = c(100,300))
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_part2_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    title = "Temperature plot",
+    x = "Minimum daily temperature(C)",
+    y = "Maximum daily temperature(C)",
+    caption = "Data from rnoaa package; temperature in 2017."
+  ) +
+  #scale_color_viridis assume the value you enter is continuous
+  viridis::scale_color_viridis(
+    name = "location",
+    discrete = TRUE)
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_part2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
