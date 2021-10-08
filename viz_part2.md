@@ -241,3 +241,32 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](viz_part2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+## Setting options
+
+Options to put at the very begining of the Rmarkdown document:
+
+``` r
+library(tidyverse)
+
+# set figure width, aspect ratio and output width(shrunk down the figure to 90% instead of 100%) for all figures in this file 
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+# to determine a theme for the entire document
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+# update some options to override ggplots:
+# make sure every plot that we use in this file use the cirtus color palette
+options(
+  ggplot2.continuous.colour = "viridis" , 
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
